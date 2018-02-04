@@ -33,7 +33,7 @@ switch (command) {
         break;
 
         //handle do-what-it-says command
-    case 'do-what-it-says';
+    case 'do-what-it-says':
     doWhatItSays();
     break;
     //when command is not valid
@@ -44,7 +44,7 @@ switch (command) {
 
 //if the my-tweets function received
 function myTweets() {
-	console.log("Tweets are on your way!");
+    console.log("Tweets are on your way!");
 
     //setting up credentials object for Twitter access
     var client = new Twitter({
@@ -68,32 +68,85 @@ function myTweets() {
 }
 
 //if the my-spotify function received
-function spotify(){
-	console.log("Let's play some Music!");
+function spotify() {
+    console.log("Let's play some Music!");
 
-	var searchMusic;
-	if( userCommand === undefined){
-		searchMusic = "The Sign";
+    var searchMusic;
+    if (userCommand === undefined) {
+        searchMusic = "The Sign";
+
+    } else {
+        searchMusic = userCommand;
+    }
+
+    //start spotify search
+    spotify.search({ type: 'track', query: searchMusic }, function(err, data) {
+        if (err) {
+            console.log("Error occured: " + err);
+            return;
+        } else {
+            console.log("Artist: " + data.tracks.items[0].artists[0].name);
+            console.log("Song: " + data.tracks.items[0].name);
+            console.log("Album: " + data.tracks.items[0].album.name);
+            console.log("Preview Here: " + data.tracks.items[0].preview_url);
+
+        }
+    });
+};
+}
+
+//movie function
+function movieThis(){
+	console.log("Lets watch some movie!");
+
+	var searchMovie;
+	if(userCommand === undefined){
+		searchMovie = "Mr Nobody";
 
 	}else{
-		searchMusic = userCommand;
-	}
-
-	//start spotify search
-	spotify.search({type:'track', query:searchMusic}, function(err,data){
-		if(err){
-			console.log("Error occured: " + err);
-			return;
-		}else{
-			console.log("Artist: " + data.tracks.items[0].artists[0].name);
-			console.log("Song: " + data.tracks.items[0].name);
-			console.log("Album: " + data.tracks.items[0].album.name);
-			console.log("Preview Here: " + data.tracks.items[0].preview_url);
-
-		}
-		});
+		searchMovie = secondCommand;
 	};
-}
+
+	var url = 'http://www.omdbapi.com/?t=' + searchMovie +'&y=&plot=long&tomatoes=true&r=json';
+     request(url, function(error, response, body){
+     	if(!error && response.statusCode == 200){
+     		console.log("Title: " + JSON.parse(body)["Title"]);
+     		console.log("Year: " + JSON.parse(body)["Year"]);
+     		console.log("IMDB Rating: " + JSON.parse(body)["imdbRating"]);
+     		console.log("Country: " + JSON.parse(body)["Country"]);
+     		console.log("Language: " + JSON.parse(body)["Language"]);
+     		console.log("Plot: " + JSON.parse(body)["Plot"]);
+     		console.log("Actors: " + JSON.parse(body)["Actors"]);
+
+     	}
+     });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
