@@ -1,20 +1,24 @@
+require('dotenv').config();
+
 var fs = require('fs');
 
 
 //Grabbing data from keys.js
-var Keys = require('./keys.js');
+var keys = require('./keys.js')
+
 //installing libraries and making requests
 var request = require('request');
-var twitter = require('twitter');
-var spotify = require('spotify');
+var Twitter = require('twitter');
+var Spotify = require('node-spotify-api');
 
-var twitterKeys = new twitter(keys.twitterKeys);
-
+var twitterKeys = new Twitter(keys.twitterKeys);
+var spotify = new Spotify(keys.spotify)
 //Argument's Array
 var nodeArgv = process.argv;
 var command = process.argv[2];
 var userCommand = process.argv[3];
-
+console.log('command', command)
+console.log('userCommand', userCommand)
 function doSomething(action, argument){
 
 //Song or movie
@@ -26,7 +30,8 @@ switch (command) {
 
         //handle the my-spotify command
     case 'my-spotify':
-        mySpotify(nodeArgv);
+        console.log('spotify is trying')
+        music(nodeArgv);
         break;
 
         //handle the movie command
@@ -42,7 +47,7 @@ switch (command) {
     default:
         console.log("Command not valid! Please try again!");
 
-}
+ }
 }
 
 //if the my-tweets function received
@@ -71,7 +76,7 @@ function myTweets() {
 }
 
 //if the my-spotify function received
-function spotify() {
+function music() {
     console.log("Let's play some Music!");
 
     var searchMusic;
@@ -96,7 +101,9 @@ function spotify() {
         }
     });
 };
-}
+console.log('before spoitify')
+music();
+console.log('after spoitify')
 
 //movie function
 function movieThis(){
@@ -105,12 +112,14 @@ function movieThis(){
 	var searchMovie;
 	if(userCommand === undefined){
 		searchMovie = "Mr Nobody";
+		console.log(searchMovie)
 
 	}else{
-		searchMovie = secondCommand;
+		searchMovie = userCommand;
 	};
 
-	var url = 'http://www.omdbapi.com/?t=' + searchMovie +'&y=&plot=long&tomatoes=true&r=json';
+	var url = 'http://www.omdbapi.com/?t=' + searchMovie +'&y=&plot=long&tomatoes=true&r=json&apikey=trilogy';
+	console.log(url)
      request(url, function(error, response, body){
      	if(!error && response.statusCode == 200){
      		console.log("Title: " + JSON.parse(body)["Title"]);
@@ -125,6 +134,7 @@ function movieThis(){
 
      	}
      });
+     console.log('after request function')
 };
 
 //do-what-it-says function
@@ -148,9 +158,7 @@ function logOutput(logText){
 	console.log(logText);
 }
 
-
-
-
+doSomething(command, userCommand)
 
 
 
