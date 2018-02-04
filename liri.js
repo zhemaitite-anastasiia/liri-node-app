@@ -13,6 +13,7 @@ var twitterKeys = new twitter(keys.twitterKeys);
 //Argument's Array
 var nodeArgv = process.argv;
 var command = process.argv[2];
+var userCommand = process.argv[3];
 
 //Song or movie
 switch (command) {
@@ -43,6 +44,7 @@ switch (command) {
 
 //if the my-tweets function received
 function myTweets() {
+	console.log("Tweets are on your way!");
 
     //setting up credentials object for Twitter access
     var client = new Twitter({
@@ -65,7 +67,33 @@ function myTweets() {
     })
 }
 
+//if the my-spotify function received
+function spotify(){
+	console.log("Let's play some Music!");
 
+	var searchMusic;
+	if( userCommand === undefined){
+		searchMusic = "The Sign";
+
+	}else{
+		searchMusic = userCommand;
+	}
+
+	//start spotify search
+	spotify.search({type:'track', query:searchMusic}, function(err,data){
+		if(err){
+			console.log("Error occured: " + err);
+			return;
+		}else{
+			console.log("Artist: " + data.tracks.items[0].artists[0].name);
+			console.log("Song: " + data.tracks.items[0].name);
+			console.log("Album: " + data.tracks.items[0].album.name);
+			console.log("Preview Here: " + data.tracks.items[0].preview_url);
+
+		}
+		});
+	};
+}
 
 
 
