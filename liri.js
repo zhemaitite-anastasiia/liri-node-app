@@ -15,6 +15,8 @@ var nodeArgv = process.argv;
 var command = process.argv[2];
 var userCommand = process.argv[3];
 
+function doSomething(action, argument){
+
 //Song or movie
 switch (command) {
     //handle the my-tweets command
@@ -40,6 +42,7 @@ switch (command) {
     default:
         console.log("Command not valid! Please try again!");
 
+}
 }
 
 //if the my-tweets function received
@@ -118,9 +121,32 @@ function movieThis(){
      		console.log("Plot: " + JSON.parse(body)["Plot"]);
      		console.log("Actors: " + JSON.parse(body)["Actors"]);
 
+
+
      	}
      });
 };
+
+//do-what-it-says function
+function doWhatItSays(){
+	fs.readFile("random.txt", "utf8", function(err,data){
+		if(err){
+			logOutput.error(err);
+		}else{
+			var randomArray = data.split(",");
+
+			action = randomArray[0];
+			argument = randomArray[1];
+			doSomething(action,argument);
+		}
+	});
+};
+//log data to the terminal and output to a text file
+
+function logOutput(logText){
+	log.info(logText);
+	console.log(logText);
+}
 
 
 
