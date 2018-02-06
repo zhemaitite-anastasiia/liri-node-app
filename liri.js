@@ -10,8 +10,8 @@ var keys = require('./keys.js')
 var request = require('request');
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
-
-var twitterKeys = new Twitter(keys.twitterKeys);
+console.log(keys.twitter)
+var client = new Twitter(keys.twitter);
 var spotify = new Spotify(keys.spotify)
 //Argument's Array
 var nodeArgv = process.argv;
@@ -19,30 +19,30 @@ var command = process.argv[2];
 var userCommand = process.argv[3];
 console.log('command', command)
 console.log('userCommand', userCommand)
+
+doSomething(command, userCommand)
+
 function doSomething(action, argument){
+	console.log(action)
 
 //Song or movie
-switch (command) {
+switch (action) {
     //handle the my-tweets command
     case 'my-tweets':
         myTweets();
         break;
-
         //handle the my-spotify command
     case 'my-spotify':
-        console.log('spotify is trying')
-        music(nodeArgv);
+        music(argument);
         break;
-
         //handle the movie command
     case 'movie-this':
-        movieThis(nodeArgv);
+        movieThis(argument);
         break;
-
         //handle do-what-it-says command
     case 'do-what-it-says':
-    doWhatItSays();
-    break;
+    	doWhatItSays();
+    	break;
     //when command is not valid
     default:
         console.log("Command not valid! Please try again!");
@@ -55,14 +55,20 @@ function myTweets() {
     console.log("Tweets are on your way!");
 
     //setting up credentials object for Twitter access
-    var client = new Twitter({
+    /*var client = new Twitter({
         consumer_key: twitterKeys.consumer_key,
         consumer_secret: twitterKeys.consumer_secret,
         access_token_key: twitterKeys.access_token_key,
         access_token_secret: twitterKeys.access_token_secret
-    })
+    })*/
+    var params = {screen_name: 'avo_coder'};
+client.get('statuses/user_timeline', params, function(error, tweets, response) {
+  if (!error) {
+    console.log(tweets);
+  }
+});
 
-    client.get('statuses/user_timeline', function(error, tweets, response) {
+    /*client.get('statuses/user_timeline', function(error, tweets, response) {
         if (error) {
             console.log(error);
             return;
@@ -72,19 +78,20 @@ function myTweets() {
 
             }
         }
-    })
+    })*/
 }
 
+
 //if the my-spotify function received
-function music() {
+function music(argument) {
     console.log("Let's play some Music!");
 
     var searchMusic;
-    if (userCommand === undefined) {
+    if (argument === undefined) {
         searchMusic = "The Sign";
 
     } else {
-        searchMusic = userCommand;
+        searchMusic = argument;
     }
 
     //start spotify search
@@ -101,21 +108,21 @@ function music() {
         }
     });
 };
-console.log('before spoitify')
-music();
-console.log('after spoitify')
+
+//music();
+
 
 //movie function
-function movieThis(){
+function movieThis(argument){
 	console.log("Lets watch some movie!");
 
 	var searchMovie;
-	if(userCommand === undefined){
+	if(argument === null){
 		searchMovie = "Mr Nobody";
-		console.log(searchMovie)
+		//console.log(searchMovie)
 
 	}else{
-		searchMovie = userCommand;
+		searchMovie = argument;
 	};
 
 	var url = 'http://www.omdbapi.com/?t=' + searchMovie +'&y=&plot=long&tomatoes=true&r=json&apikey=trilogy';
@@ -139,10 +146,12 @@ function movieThis(){
 
 //do-what-it-says function
 function doWhatItSays(){
+	console.log('run')
 	fs.readFile("random.txt", "utf8", function(err,data){
 		if(err){
 			logOutput.error(err);
 		}else{
+			console.log(data)
 			var randomArray = data.split(",");
 
 			action = randomArray[0];
@@ -158,7 +167,7 @@ function logOutput(logText){
 	console.log(logText);
 }
 
-doSomething(command, userCommand)
+
 
 
 
