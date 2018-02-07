@@ -54,31 +54,17 @@ switch (action) {
 function myTweets() {
     console.log("Tweets are on your way!");
 
-    //setting up credentials object for Twitter access
-    /*var client = new Twitter({
-        consumer_key: twitterKeys.consumer_key,
-        consumer_secret: twitterKeys.consumer_secret,
-        access_token_key: twitterKeys.access_token_key,
-        access_token_secret: twitterKeys.access_token_secret
-    })*/
     var params = {screen_name: 'avo_coder'};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
-    console.log(tweets);
-  }
+    for (var i=0; i<tweets.length; i++){
+        var date = tweets[i].created_at;
+    console.log("@avo_coder: " + tweets[i].text + " Created At: " + date.substring(0, 19));
+    console.log("----------------------");
+}
+}
 });
 
-    /*client.get('statuses/user_timeline', function(error, tweets, response) {
-        if (error) {
-            console.log(error);
-            return;
-            // going through tweets, to a maximum of 20 but no mmore tweets than on account
-            for (var i = 0; i < Math.min(20, tweets.length); i++) {
-                output += tweets[i].created_at + "\n" + tweets[i].text + "\n";
-
-            }
-        }
-    })*/
 }
 
 
@@ -88,7 +74,7 @@ function music(argument) {
 
     var searchMusic;
     if (argument === undefined) {
-        searchMusic = "The Sign";
+        searchMusic = '"The Sign" by Ace of Base';
 
     } else {
         searchMusic = argument;
@@ -117,7 +103,7 @@ function movieThis(argument){
 	console.log("Lets watch some movie!");
 
 	var searchMovie;
-	if(argument === null){
+	if(argument === undefined){
 		searchMovie = "Mr Nobody";
 		//console.log(searchMovie)
 
@@ -126,12 +112,13 @@ function movieThis(argument){
 	};
 
 	var url = 'http://www.omdbapi.com/?t=' + searchMovie +'&y=&plot=long&tomatoes=true&r=json&apikey=trilogy';
-	console.log(url)
+	//console.log(url)
      request(url, function(error, response, body){
      	if(!error && response.statusCode == 200){
      		console.log("Title: " + JSON.parse(body)["Title"]);
      		console.log("Year: " + JSON.parse(body)["Year"]);
      		console.log("IMDB Rating: " + JSON.parse(body)["imdbRating"]);
+            //console.log("Rotten Tomatoes Rating" + JSON.parse(body)["RottenTomatoes"]);
      		console.log("Country: " + JSON.parse(body)["Country"]);
      		console.log("Language: " + JSON.parse(body)["Language"]);
      		console.log("Plot: " + JSON.parse(body)["Plot"]);
@@ -141,12 +128,12 @@ function movieThis(argument){
 
      	}
      });
-     console.log('after request function')
+     //console.log('after request function')
 };
 
 //do-what-it-says function
 function doWhatItSays(){
-	console.log('run')
+	//console.log('run')
 	fs.readFile("random.txt", "utf8", function(err,data){
 		if(err){
 			logOutput.error(err);
