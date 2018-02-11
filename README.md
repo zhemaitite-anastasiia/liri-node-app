@@ -11,7 +11,7 @@ node liri.js my-tweets
 
 This will show your last 20 tweets and when they were created at in your terminal/bash window.
 <br>
-<a href="https://imgflip.com/gif/243pyq"><img src="https://i.imgflip.com/243pyq.gif" title="made at imgflip.com"/></a>
+<a href="https://imgflip.com/gif/243pyq"><img src="https://i.imgflip.com/243pyq.gif" title="made at imgflip.com" syle='width:500px; height:350px;'/></a>
 <br>
 <br>
 node liri.js my-spotify 
